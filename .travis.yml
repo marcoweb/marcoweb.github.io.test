@@ -19,6 +19,7 @@ after_success:
 - echo "  IdentityFile ~/.ssh/publish-key" >> ~/.ssh/config
 - git remote add origin git@github.com:marcoweb/marcoweb.github.io.git
 - git add .
+- git clean -qf
 - git commit -m "Deploy"
 - git pull origin master
 - git push origin master
