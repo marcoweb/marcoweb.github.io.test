@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+- '6'
+branches:
+  only:
+  - source
+cache:
+  directories:
+  - node_modules
+script:
+- npm run build --prod
+after_success:
+- cp -v publish-key.* dist
+- cd dist
+- git init
+- openssl aes-256-cbc -K $encrypted_160c24586979_key -iv $encrypted_160c24586979_iv -in publish-key.enc -out ~/.ssh/publish-key -d
+- chmod u=rw,og= ~/.ssh/publish-key
+- echo "Host github.com" >> ~/.ssh/config
+- echo "  IdentityFile ~/.ssh/publish-key" >> ~/.ssh/config
+- git remote add origin git@github.com:marcoweb/marcoweb.github.io.git
+- git add .
+- git commit -m "Deploy"
+- git pull origin master
+- git push origin master
