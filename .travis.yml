@@ -1,23 +1,39 @@
+# Define a Linguagem do Projeto : node_js
 language: node_js
+# Define a versão do node a ser utilizada : 6
 node_js:
 - '6'
+# Define o branch a ser utilizado como fonte : source
 branches:
   only:
   - source
+# Configura o ambiente
+before_install:
+# Descriptografa a chave privada utilizado as variáveis de ambiente
+- openssl aes-256-cbc -K $encrypted_160c24586979_key -iv $encrypted_160c24586979_iv -in ../publish-key.enc -out ~/.ssh/publish-key -d
+# Seta as permissões da chave descriptografada para que somente o usuário atual tenha acesso
+- chmod u=rw,og= ~/.ssh/publish-key
+# Prepara o arquivo de configuração ssh para acessar o repositório remoto
+- echo "Host github.com" >> ~/.ssh/config
+- echo "  IdentityFile ~/.ssh/publish-key" >> ~/.ssh/config
+# Define os diretórios cacheados: node_modules
 cache:
   directories:
   - node_modules
+# Script de construção
 script:
 - npm run build --prod
+# Script a ser executado quando o de construção for bem sucedido
 after_success:
-# - cp -v publish-key.* dist
+# Alterna para o diretório 'dist'
 - cd dist
+# Inicializa um repositório git no diretório atual ('dist')
 - git init
+# Adiciona o endereço do repositório remoto
 - git remote add origin git@github.com:marcoweb/marcoweb.github.io.git
-- openssl aes-256-cbc -K $encrypted_160c24586979_key -iv $encrypted_160c24586979_iv -in ../publish-key.enc -out ~/.ssh/publish-key -d
-- chmod u=rw,og= ~/.ssh/publish-key
-- echo "Host github.com" >> ~/.ssh/config
-- echo "  IdentityFile ~/.ssh/publish-key" >> ~/.ssh/config
+# Adiciona os arquivos do diretório atual ao git
 - git add .
+# Realiza o commit
 - git commit -m "Deploy"
+# Atualiza o repositório remoto forçando alterações
 - git push -f origin +master:refs/heads/master
