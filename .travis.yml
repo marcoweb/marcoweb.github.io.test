@@ -10,7 +10,7 @@ branches:
 # Configura o ambiente
 before_install:
 # Descriptografa a chave privada utilizado as variáveis de ambiente
-- openssl aes-256-cbc -K $encrypted_160c24586979_key -iv $encrypted_160c24586979_iv -in ../publish-key.enc -out ~/.ssh/publish-key -d
+- openssl aes-256-cbc -K $encrypted_160c24586979_key -iv $encrypted_160c24586979_iv -in publish-key.enc -out ~/.ssh/publish-key -d
 # Seta as permissões da chave descriptografada para que somente o usuário atual tenha acesso
 - chmod u=rw,og= ~/.ssh/publish-key
 # Prepara o arquivo de configuração ssh para acessar o repositório remoto
