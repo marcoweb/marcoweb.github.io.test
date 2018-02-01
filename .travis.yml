@@ -20,4 +20,4 @@ after_success:
 - echo "  IdentityFile ~/.ssh/publish-key" >> ~/.ssh/config
 - git add .
 - git commit -m "Deploy"
-- git push -f +master:refs/heads/master
+- git push -f origin +master:refs/heads/master
